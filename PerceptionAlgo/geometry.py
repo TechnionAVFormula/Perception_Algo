@@ -21,7 +21,7 @@ def img_cones_to_world_cones(img_cones, depth_img):
     """    
 
     # Extract parameters #### with the real camera need to prefor, only once with get_camera_params()!!!!
-    K, R_inv, t_inv, cx, cy, f = extract_camera_params(depth_img.width, depth_img.height, depth_img.h_fov, depth_img.camera_position)
+    K, R_inv, t_inv, cx, cy, f = extract_camera_params(depth_img.width, depth_img.height, depth_img.h_fov, depth_img.position)
 
     # Translating depth image from bytes to pixel array
     ###### depth_arr = np.asarray(Image.frombytes("I;16", (width, height), img_depth))
@@ -29,7 +29,7 @@ def img_cones_to_world_cones(img_cones, depth_img):
     # Choose single representative point in each BB:
     img_cones_tmp = []
     for bb_cone in img_cones:
-        img_cones_tmp.append([bb_cone.get_mid_bb(), bb_cone.color]) # Get the u,v of center of BB, and type
+        img_cones_tmp.append(bb_cone.get_mid_bb()) # Get the u,v of center of BB, and type
     img_cones_tmp = np.asarray(img_cones_tmp)
 
     # Preparing indices and appropriate depths values
@@ -37,16 +37,16 @@ def img_cones_to_world_cones(img_cones, depth_img):
     index_y = img_cones_tmp[:, 1].astype(np.int)
     depths = depth_arr[index_y, index_x]  # Using Matrix mult instead of loop to increase performance
     depths = depths/100  # convert from [cm] to [m]
-    depths = convert_radial_to_perpendicular_depth(img_cones_tmp[:,0:2], depths, cx, cy, f)
+    depths = convert_radial_to_perpendicular_depth(img_cones_tmp, depths, cx, cy, f)
 
     # Extract xyz coordinates of each cone together using matrices
-    positions = world_XYZ_from_uvd(img_cones_tmp[:,0:2], depths=depths, K=K, R_inv=R_inv, t_inv=t_inv)
+    positions = world_XYZ_from_uvd(img_cones_tmp, depths=depths, K=K, R_inv=R_inv, t_inv=t_inv)
 
     # Arrange the data 
     cone_map = []  # list of WorldCone objects in ENU coordinate system (X - right, Y-forward, Z-upward)
-    for index, img_cone in enumerate(img_cones_tmp):
+    for index, bb_cone in enumerate(img_cones):
         # img_depth_px = img_depth.load()
-        cone = WorldCone(positions[index,0:2], img_cone.color, img_cone.pr)
+        cone = WorldCone(*positions[index,0:2], bb_cone.color, bb_cone.pr)
         cone_map.append(cone)
 
     return cone_map

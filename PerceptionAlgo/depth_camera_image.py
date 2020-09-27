@@ -31,6 +31,6 @@ class DepthImage(Image):
         super().__init__(w, h)
         self.data = PIL.Image.frombytes("I;16", (w, h), data) # convert from bit representation to pixels
         self.position = pos
-        self.hfov = hfov
-        self.vfov = vfov
+        self.h_fov = hfov
+        self.v_fov = vfov
         self.type = typ

@@ -68,8 +68,8 @@ class BoundingBoxCone:
         edgedYellow = cv2.Canny(tempYellow, 30, 300)
         
 
-        final_frame = cv2.hconcat((frame, edgedYellow, edgedBlue))
-        cv2.imshow("final_frame", final_frame)
+        # final_frame = cv2.hconcat((frame, edgedYellow, edgedBlue))
+        # cv2.imshow("final_frame", final_frame)
 
         n_white_pix_yellow = np.sum(maskYellow3 == 255)
         n_white_pix_blue = np.sum(maskBlue3 == 255)

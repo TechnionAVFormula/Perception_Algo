@@ -16,7 +16,7 @@ class WorldCone:
 
     def __init__(self, x, y, color, pr):
         WorldCone.index += 1
-        self.id = index
+        self.id = WorldCone.index
         self.x = x
         self.y = y
         self.color = color

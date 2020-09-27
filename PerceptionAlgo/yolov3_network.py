@@ -1,7 +1,7 @@
 from .bounding_box_cone import BoundingBoxCone
 from .models import Darknet
 from .utils.utils import calculate_padding
-from .utils import nms
+from .utils.nms import nms
 
 import argparse
 import os
@@ -89,7 +89,7 @@ class YoloV3Network:
         preprocessing_time = timer()
         new_width, new_height = self.model.img_size()
         pad_h, pad_w, ratio = calculate_padding(target_img.height, target_img.width, new_height, new_width)
-        img = torchvision.transforms.functional.pad(target_img, padding=(pad_w, pad_h, pad_w, pad_h), fill=(127, 127, 127), padding_mode="constant")
+        img = torchvision.transforms.functional.pad(target_img.data, padding=(pad_w, pad_h, pad_w, pad_h), fill=(127, 127, 127), padding_mode="constant")
         img = torchvision.transforms.functional.resize(img, (new_height, new_width))
         img = torchvision.transforms.functional.to_tensor(img)
         img = img.unsqueeze(0)
@@ -135,7 +135,7 @@ class YoloV3Network:
                 BB = BoundingBoxCone(u=round(x0), v=round(y0), h=round(y1 - y0), w=round(x1 - x0), pr=pr)
                 # u, v - left top bounding box position in image plain
                 # w, h - width and height of bounding box in pixels
-                BB.cut_cone_from_img(target_img)
+                BB.cut_cone_from_image(target_img)
                 color_prediction_time = timer()
                 BB.predict_color() # classify detected cone to types
                 color_prediction_time = timer() - color_prediction_time
