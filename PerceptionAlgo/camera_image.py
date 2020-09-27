@@ -1,4 +1,5 @@
-from PIL import Image
+import PIL
+from .image import Image
 
 class CameraImage(Image):
     """
@@ -22,7 +23,7 @@ class CameraImage(Image):
         """
         super().__init__(w, h)
         self.hsv = False
-        self.data = Image.frombytes("RGB", (w, h), data, 'raw', 'RGBX', 0,-1) # convert from bit representation to RGB + depth format
+        self.data = PIL.Image.frombytes("RGB", (w, h), data, 'raw', 'RGBX', 0,-1) # convert from bit representation to RGB + depth format
 
     
     def draw_bb_on_image(self, bb_list):
@@ -37,8 +38,8 @@ class CameraImage(Image):
         """        
     
         img_with_bb = self.data
-        draw = ImageDraw.Draw(img_with_bb)
-        font = ImageFont.load_default()
+        draw = PIL.ImageDraw.Draw(img_with_bb)
+        font = PIL.ImageFont.load_default()
 
         for cone in bb_list:
             # extract BB features:

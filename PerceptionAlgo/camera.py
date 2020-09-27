@@ -3,7 +3,7 @@ import cv2
 import glob
 import pyzed.sl as sl
 # from ReadData import read_alignment, read_calibration
-from Geometry import  World_XY_from_uv_and_Z, inverse_perspective
+from .geometry import  World_XY_from_uv_and_Z, inverse_perspective
 # from utils import getBoxes
 
 

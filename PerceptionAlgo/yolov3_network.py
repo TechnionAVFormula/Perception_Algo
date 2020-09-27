@@ -1,5 +1,7 @@
-from bounding_box_cone import BoundingBoxCone
-
+from .bounding_box_cone import BoundingBoxCone
+from .models import Darknet
+from .utils.utils import calculate_padding
+from .utils import nms
 
 import argparse
 import os
@@ -18,14 +20,11 @@ from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
 # from PIL import Image, ImageDraw
 import torchvision
-from models import Darknet
-from utils.datasets import ImageLabelDataset  ######## need to add this files from YOLO repo to BaseClasses repo to get access #######
-from utils.nms import nms
-from utils.utils import xywh2xyxy, calculate_padding
 import warnings
 from tqdm import tqdm
+from timeit import default_timer as timer
+import logging
 warnings.filterwarnings("ignore")
-
 
 
 class YoloV3Network:
@@ -71,7 +70,7 @@ class YoloV3Network:
         self.model.to(self.device, non_blocking=True)
 
 
-    def set_Params(self, weights_path, model_cfg, th1, th2, ....):
+    def set_Params(self, weights_path, model_cfg, th1, th2, *args, **kwargs):
         # self.th1 = th1
         # self.th2 = th2
         pass

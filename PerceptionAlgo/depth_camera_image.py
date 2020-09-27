@@ -1,4 +1,5 @@
-from PIL import Image
+import PIL
+from .image import Image
 
 class DepthImage(Image):
     '''
@@ -28,7 +29,7 @@ class DepthImage(Image):
             pos ([type]): camera position in cognata car coordinate system.
         """
         super().__init__(w, h)
-        self.data = Image.frombytes("I;16", (w, h), data) # convert from bit representation to pixels
+        self.data = PIL.Image.frombytes("I;16", (w, h), data) # convert from bit representation to pixels
         self.position = pos
         self.hfov = hfov
         self.vfov = vfov

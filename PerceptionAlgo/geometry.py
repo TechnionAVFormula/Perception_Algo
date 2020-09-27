@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from PIL import Image
-from world_cone import WorldCone
+from .world_cone import WorldCone
 
 
 # ---------------------------------------------------------------------------- #
