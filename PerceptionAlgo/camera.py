@@ -62,15 +62,15 @@ class Camera:
 
 
 
-    def calibration():
+    def calibration(board_height = 5, board_width = 8, square_size = 30.0):
         
         # termination criteria - of the form: (type, max_iter, epsilon)
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-        # prepare object points, like (0,0,0), (3,0,0), (6,0,0) ....,(21,0,12) - cordinate of the chessboard
-        #need to specify the correct chessboard grid size - here it is 8x5 and square size is 30mm.
-        objp = np.zeros((5*8,3), np.float32)
-        objp[:,0:3:2] = (np.mgrid[0:8,0:5].T.reshape(-1,2))*3
+        # prepare object points, like (0,0,0), (30,0,0), (60,0,0) ....,(210,120,0) - cordinate of the chessboard
+        #need to specify the correct chessboard grid size - here it is 5x8 and square size is 30mm.
+        objp = np.zeros((board_width*board_height,3), np.float32)
+        objp[:,:2] = (np.mgrid[0:board_height,0:board_width].T.reshape(-1,2))*square_size
 
         # Arrays to store object points and image points from all the images.
         objpoints = [] # 3d point in real world space
@@ -89,7 +89,7 @@ class Camera:
             # Need to specify the correct chessboard pattern size of inner corners - here it is 8x5
             # Note: The function requires white space (like a square-thick border, the wider the better) around
             # the board to make the detection more robust in various environments. 
-            ret, corners = cv2.findChessboardCorners(gray, (8,5),None)
+            ret, corners = cv2.findChessboardCorners(gray, (board_height,board_width),None)
 
             # If found, add object points, image points (after refining them)
             if ret == True:
@@ -100,7 +100,7 @@ class Camera:
                 imgpoints.append(corners2)
                 
                 # Draw and display the corners
-                img = cv2.drawChessboardCorners(img, (8,5), corners2,ret)
+                img = cv2.drawChessboardCorners(img, (board_height,board_width), corners2,ret)
                 cv2.imshow('img',img)
                 cv2.waitKey(5)
 
